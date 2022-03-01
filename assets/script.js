@@ -105,7 +105,6 @@ const calculateScore = (selectedAnswer, currentQuestion) => {
     score++
     console.log(score)
   } else {
-    // alert('error')
     seconds = seconds - 10
   }
 }
