@@ -27,7 +27,7 @@
 }
 
 .start-btn {
-  margin-top: 2rem;
+  margin-top: 1rem;
   background-color: #218380;
   padding: 1rem;
   border: 1px solid #fff;
@@ -43,4 +43,32 @@
   font-size: 24px;
   color: #000;
   line-height: normal;
+}
+
+.pb-30px {
+  padding-bottom: 30px;
+}
+
+.pb-10px {
+  padding-bottom: 10px;
+}
+
+.hide {
+  display: none;
+}
+
+.option {
+  list-style-type: none;
+  color: #ffe;
+  background-color: #218380;
+  padding: 0.5rem;
+  margin: 1rem 0;
+}
+
+.correct {
+  background-color: #0f0;
+}
+
+.wrong {
+  background-color: #ff0000;
 }
