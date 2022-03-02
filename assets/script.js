@@ -1,3 +1,4 @@
+let board = document.querySelector('.board')
 let mainSection = document.querySelector('.main-section')
 let optionList = document.querySelector('.optionList')
 let questionTitle = document.querySelector('.question-title')
@@ -7,7 +8,7 @@ let options = document.querySelectorAll('.option')
 let timer = document.querySelector('.timer')
 
 let currentQuestion = 0
-let seconds = 60
+let seconds = 50
 let score = 0
 
 const questions = [
@@ -46,6 +47,9 @@ const questions = [
   },
 ]
 
+console.log(board)
+
+// Start quiz
 startBtn.addEventListener('click', () => {
   startBtn.classList.add('hide')
   testRules.classList.add('hide')
@@ -55,6 +59,7 @@ startBtn.addEventListener('click', () => {
   renderQuestion(currentQuestion)
 })
 
+// Render question
 const renderQuestion = (currentQuestion) => {
   questionTitle.innerHTML = questions[currentQuestion].questionText
   options.forEach((option, index) => {
@@ -65,46 +70,80 @@ const renderQuestion = (currentQuestion) => {
   bindOptions()
 }
 
+//  Bind options
 const bindOptions = () => {
   options.forEach((option) => {
     option.addEventListener('click', selection)
   })
 }
 
+// Remove options
 const detachOptions = () => {
   options.forEach((option) => {
     option.removeEventListener('click', selection)
   })
 }
 
+// Calculate score and move to Next question
 const selection = (e) => {
   let selectedOption = e.target
   let selectedAnswer = selectedOption.innerHTML
 
-  console.log(selectedAnswer)
   calculateScore(selectedAnswer, currentQuestion)
 
-  renderQuestion(currentQuestion + 1)
+  currentQuestion = currentQuestion + 1
+  if (currentQuestion < questions.length && seconds > 0) {
+    renderQuestion(currentQuestion)
+  } else {
+    displayScore()
+  }
 }
 
+// Timer
 const countDown = () => {
   let interval = setInterval(() => {
-    seconds--
     timer.innerHTML = `Time left: ${seconds}`
 
-    if (seconds <= 0) {
+    if (seconds <= 1) {
       clearInterval(interval)
-      console.log('Time is up!')
+      displayScore()
     }
+    seconds--
   }, 1000)
 }
 
+// calculate score
 const calculateScore = (selectedAnswer, currentQuestion) => {
-  console.log(questions[currentQuestion])
   if (selectedAnswer === questions[currentQuestion].answer) {
     score++
-    console.log(score)
   } else {
-    seconds = seconds - 10
+    seconds = seconds <= 10 ? 0 : seconds - 10
   }
 }
+
+// Results page
+const displayScore = () => {
+  optionList.classList.add('hide')
+  mainSection.innerHTML = `<h2>All Done!</h2> <p>Your final score is ${score * 5} </p> 
+  <form>
+  <input type='text' name='scorerName' /> Enter your name
+  <button onclick=saveEntry()>Submit</button>
+  </form>`
+}
+
+const saveEntry = () => {
+  localStorage.setItem(document.querySelector('input[name=scorerName]').value, score)
+}
+
+const displayHighScores = () => {
+  alert('bol')
+  mainSection.innerHTML = `<h2>High Scores</h2> <br/>`
+  for (let i = 0; i < localStorage.length; i++) {
+    mainSection.innerHTML += `<p>${localStorage.key(i)} - ${localStorage.getItem(
+      localStorage.key(i)
+    )}</p>`
+  }
+}
+
+// Leaderboard
+board.addEventListener('click', displayHighScores)
